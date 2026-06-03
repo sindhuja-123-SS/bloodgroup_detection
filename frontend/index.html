@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusBlood | Professional Blood Group Detection</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-droplet icon-red"></i>
+                    <div class="pulse-ring-logo"></div>
+                </div>
+                <h2>Nexus<span>Blood</span></h2>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="active">
+                    <i class="fa-solid fa-border-all"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History Logs</span>
+                </a>
+                <a href="#">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Patients</span>
+                </a>
+                <a href="#">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="system-status">
+                <div class="status-indicator"></div>
+                <div class="status-text">
+                    <span class="status-title">System Online</span>
+                    <span class="status-sub">Connected to Engine v2.4</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="header-titles">
+                    <h1 class="page-title">Blood Group Analysis</h1>
+                    <p class="page-subtitle">AI-powered biometric screening and classification</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon-subtle" title="Notifications">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-info">
+                            <span class="user-name">Dr. Sarah Jenkins</span>
+                            <span class="user-role">Lead Hematologist</span>
+                        </div>
+                        <img src="https://ui-avatars.com/api/?name=Sarah+Jenkins&background=3B82F6&color=fff&rounded=true&bold=true" alt="User Profile">
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                
+                <!-- Upload & Scan Card (Left) -->
+                <div class="card scan-card">
+                    <div class="card-header">
+                        <div class="header-title-group">
+                            <div class="icon-box bg-blue-dim"><i class="fa-solid fa-fingerprint text-blue"></i></div>
+                            <h3>Biometric Input</h3>
+                        </div>
+                        <span class="badge" id="scan-status-badge">Awaiting Image</span>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="patient-input-wrapper" style="margin-bottom: 20px;">
+                            <label for="patient-name-input" style="display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem;">Patient Name</label>
+                            <input type="text" id="patient-name-input" placeholder="e.g. John Doe" style="width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-dim); color: white; font-family: inherit; font-size: 1rem; outline: none; transition: all 0.3s ease;">
+                        </div>
+                        <div class="upload-zone" id="drop-zone">
+                            <input type="file" id="file-input" accept="image/*" hidden>
+                            
+                            <!-- Initial Upload State -->
+                            <div class="upload-content" id="upload-content">
+                                <div class="upload-icon-wrapper">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                                </div>
+                                <h4>Upload Fingerprint Scan</h4>
+                                <p>Drag and drop image or <span class="text-highlight">browse files</span></p>
+                                <span class="file-formats">Supported formats: JPG, PNG, BMP (Max 5MB)</span>
+                            </div>
+                            
+                            <!-- Image Preview State -->
+                            <div class="preview-container hidden" id="preview-container">
+                                <div class="image-wrapper">
+                                    <img id="preview-img" src="" alt="Fingerprint">
+                                    <div class="scan-laser hidden" id="scan-laser"></div>
+                                    <div class="scan-grid hidden" id="scan-grid"></div>
+                                </div>
+                                <div class="file-info">
+                                    <div class="file-details">
+                                        <i class="fa-regular fa-image file-icon"></i>
+                                        <div class="file-meta">
+                                            <span id="file-name" class="file-name" title="">fingerprint.jpg</span>
+                                            <span id="file-size" class="file-size">1.2 MB</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-remove" id="remove-file-btn" title="Remove image">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-large w-100" id="analyze-btn" disabled>
+                                <i class="fa-solid fa-microscope"></i>
+                                <span>Initiate Analysis</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Card (Right) -->
+                <div class="card results-card">
+                    <div class="card-header">
+                        <div class="header-title-group">
+                            <div class="icon-box bg-purple-dim"><i class="fa-solid fa-notes-medical text-purple"></i></div>
+                            <h3>Diagnostic Results</h3>
+                        </div>
+                    </div>
+
+                    <div class="card-body results-container">
+                        
+                        <!-- Empty State -->
+                        <div class="empty-state" id="results-empty">
+                            <div class="hex-icon-wrapper">
+                                <i class="fa-solid fa-vial-circle-check"></i>
+                            </div>
+                            <h4>No Data to Display</h4>
+                            <p>Please upload and scan a fingerprint image to generate blood group diagnostics.</p>
+                        </div>
+
+                        <!-- Scanning Progress State -->
+                        <div class="scanning-state hidden" id="scanning-state">
+                            <div class="progress-circle-container">
+                                <svg class="progress-ring" width="120" height="120">
+                                    <circle class="progress-ring__circle bg" stroke="var(--border-color)" stroke-width="6" fill="transparent" r="52" cx="60" cy="60"/>
+                                    <circle class="progress-ring__circle fg" id="progress-circle-fg" stroke="var(--primary)" stroke-width="6" fill="transparent" r="52" cx="60" cy="60"/>
+                                </svg>
+                                <div class="percentage-display">
+                                    <span id="scan-percentage">0%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="terminal-logs" id="terminal-logs">
+                                <!-- Logs injected via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Final Results State -->
+                        <div class="final-results hidden" id="final-results">
+                            
+                            <div class="result-hero">
+                                <div class="blood-type-display">
+                                    <span class="label">Detected Blood Group</span>
+                                    <div class="blood-type-wrapper">
+                                        <h1 id="blood-type-result">A+</h1>
+                                        <div class="glow-effect"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-grid">
+                                <div class="metric-box">
+                                    <div class="metric-header">
+                                        <span class="metric-title">Model Confidence</span>
+                                        <i class="fa-solid fa-bullseye text-green"></i>
+                                    </div>
+                                    <div class="metric-value text-green" id="confidence-score">98.5%</div>
+                                    <div class="progress-bar"><div class="progress bg-green" id="confidence-bar" style="width: 0%"></div></div>
+                                </div>
+                                
+                                <div class="metric-box">
+                                    <div class="metric-header">
+                                        <span class="metric-title">Ridge Pattern</span>
+                                        <i class="fa-solid fa-water text-blue"></i>
+                                    </div>
+                                    <div class="metric-value text-blue" id="pattern-type">Whorl</div>
+                                    <span class="metric-sub">Primary classification</span>
+                                </div>
+                                
+                                <div class="metric-box">
+                                    <div class="metric-header">
+                                        <span class="metric-title">Minutiae Points</span>
+                                        <i class="fa-solid fa-compress text-purple"></i>
+                                    </div>
+                                    <div class="metric-value text-purple" id="minutiae-count">42</div>
+                                    <span class="metric-sub">Extracted features</span>
+                                </div>
+                                
+                                <div class="metric-box">
+                                    <div class="metric-header">
+                                        <span class="metric-title">Scan Quality</span>
+                                        <i class="fa-solid fa-star text-yellow"></i>
+                                    </div>
+                                    <div class="metric-value text-yellow" id="quality-index">High</div>
+                                    <div class="progress-bar"><div class="progress bg-yellow" style="width: 85%"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="btn btn-secondary" id="download-report-btn">
+                                    <i class="fa-solid fa-file-arrow-down"></i>
+                                    <span>Export Report</span>
+                                </button>
+                                <button class="btn btn-primary" id="new-scan-btn">
+                                    <i class="fa-solid fa-arrows-rotate"></i>
+                                    <span>New Scan</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent History Card (Bottom spanning) -->
+                <div class="card history-card">
+                    <div class="card-header">
+                        <div class="header-title-group">
+                            <div class="icon-box bg-gray-dim"><i class="fa-solid fa-list text-gray"></i></div>
+                            <h3>Session History</h3>
+                        </div>
+                        <button class="btn-text">View All <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Patient Name</th>
+                                        <th>File Name</th>
+                                        <th>Blood Group</th>
+                                        <th>Confidence</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-tbody">
+                                    <tr class="empty-history" id="history-empty-row">
+                                        <td colspan="6">No scans performed in the current session.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="script.js?v=2"></script>
+</body>
+</html>
